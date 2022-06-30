@@ -21,6 +21,9 @@ app.use( cors());
 
 app.use( express.json());
 
+// Carpeta publica 
+app.use( express.static('public'));
+
 // llamar a la base de datos
 dbConnection();
 
