@@ -43,21 +43,91 @@ const crearHospital = async (req = resquest, res = response) => {
 }
  
 
-const actualizarHospital= (req = resquest, res = response) => {
+const actualizarHospital= async (req = resquest, res = response) => {
+    
+    const id = req.params.id;
+    const uid = req.uid;
 
-    res.json({
-        ok: true,
-        msg:'actualizarHospitales'
-    })
+    try {
+
+        const hospital = await Hospital.findById( id );
+
+        console.log(hospital);
+
+        if ( !hospital) {
+
+            return res.status(404).json({
+                ok: false,
+                msg: 'Hospital no encontrado'  
+            })
+        }
+               
+         const cambiosHospital = {
+            ...req.body,
+            usuario: uid,
+           
+        }
+
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospital, {new: true}); 
+
+                
+        res.json({
+            ok: true,
+            id,
+            hospitalActualizado
+        })
+
+
+        
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: ' Error inesperado'
+        })
+    }
+    
 }
  
 
-const borrarHospital= (req = resquest, res = response) => {
+const borrarHospital= async (req = resquest, res = response) => {
 
-    res.json({
-        ok: true,
-        msg:'eliminarHospitales'
-    })
+    const id = req.params.id;
+
+
+    try {
+
+        const hospital = await Hospital.findById( id );
+
+        console.log(hospital);
+
+        if ( !hospital) {
+
+            return res.status(404).json({
+                ok: false,
+                msg: 'Hospital no encontrado'  
+            })
+        }
+
+        await Hospital.findByIdAndDelete(id)
+                
+        res.json({
+            ok: true,
+            msg: ' Hospital Eliminado'
+         
+        })
+
+        
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: ' Error inesperado'
+        })
+    }
+    
 }
  
 
