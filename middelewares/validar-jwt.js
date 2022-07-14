@@ -15,6 +15,8 @@ const validarJWT = (req, res, next) => {
    }
 
    try {
+
+     // El jwt.verify me verifica si el token es valido, si no es valido va a disparar el catch
        const { uid } = jwt.verify( token, process.env.JWT_SECRET);
 
        console.log(uid);
